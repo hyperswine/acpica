@@ -1,4 +1,4 @@
-use core::ffi::c_char;
+use core::{ffi::c_char, ptr::null_mut};
 
 use super::{
     local::{AcpiNamespaceNode, AcpiOperandObject},
@@ -83,3 +83,18 @@ pub const AOPOBJ_OBJECT_INITIALIZED: i32 = 0x08;
 pub const AOPOBJ_REG_CONNECTED: i32 = 0x10;
 pub const AOPOBJ_SETUP_COMPLETE: i32 = 0x20;
 pub const AOPOBJ_INVALID: i32 = 0x40;
+
+// ----------
+// TESTS
+// ----------
+
+#[test]
+fn test_object_event() {
+    let obj = AcpiObjectCommonHeader {
+        next_object: null_mut(),
+        descriptor_type: 0,
+        object_type: 0,
+        ref_count: 0,
+        flags: 0,
+    };
+}
