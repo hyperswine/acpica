@@ -1,3 +1,5 @@
+use super::object::*;
+
 #[repr(C)]
 pub struct AcpiNamespaceNode {
     object: i32

@@ -1,6 +1,9 @@
 use core::ffi::c_char;
 
-use super::local::{AcpiOperandObject, AcpiNamespaceNode};
+use super::{
+    local::{AcpiNamespaceNode, AcpiOperandObject},
+    AcpiSemaphore,
+};
 
 // ----------
 // TYPES
@@ -9,6 +12,7 @@ use super::local::{AcpiOperandObject, AcpiNamespaceNode};
 // Headers and Buffers
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectCommonHeader {
     next_object: *mut AcpiOperandObject,
     descriptor_type: u8,
@@ -18,6 +22,7 @@ pub struct AcpiObjectCommonHeader {
 }
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiCommonBufferInfo<T> {
     pointer: T,
     length: u32,
@@ -25,9 +30,11 @@ pub struct AcpiCommonBufferInfo<T> {
 
 // MAIN OBJECTS
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectCommon(AcpiObjectCommonHeader);
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectInteger {
     header: AcpiObjectCommonHeader,
     fill: [u8; 3],
@@ -35,31 +42,34 @@ pub struct AcpiObjectInteger {
 }
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectString {
     header: AcpiObjectCommonHeader,
     buffer_info: AcpiCommonBufferInfo<c_char>,
 }
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectBuffer {
     header: AcpiObjectCommonHeader,
     buffer_info: AcpiCommonBufferInfo<u8>,
     aml_length: u32,
     aml_start: *mut u8,
-    node: *mut AcpiNamespaceNode
+    node: *mut AcpiNamespaceNode,
 }
-
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectPackage {
     header: AcpiObjectCommonHeader,
     node: *mut AcpiNamespaceNode,
-    elements: *mut *mut AcpiOperandObject
+    elements: *mut *mut AcpiOperandObject,
 }
 
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectEvent {
     header: AcpiObjectCommonHeader,
-    os_semaphore: AcpiSemaphore
+    os_semaphore: AcpiSemaphore,
 }
 
 // ----------

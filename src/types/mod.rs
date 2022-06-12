@@ -2,8 +2,10 @@
 // MODULES
 // -----------------
 
-pub mod object;
+// NOTE: does not include any debug statistics (ACPI_DBG_TRACK_ALLOCATIONS)
+
 pub mod local;
+pub mod object;
 
 // -----------------
 // BUILD TYPES & CONSTANTS
@@ -49,5 +51,55 @@ pub type AcpiCpuFlags = AcpiSize;
 pub type AcpiSpinlock = *mut c_void;
 pub type AcpiSemaphore = *mut c_void;
 pub type AcpiMutex = *mut c_void;
+// assume no defined cache, otherwise use ACPI_MEMORY_LIST
+pub type AcpiCache = *mut c_void;
 
 // Compiler-Dependent
+
+// MEMORY
+pub struct AcpiMemoryList {
+    list_name: *const c_char,
+    list_head: *const c_void,
+    object_size: u16,
+    max_depth: u16,
+    curr_depth: u16,
+}
+
+// BitRegister IDs
+
+/* PM1 Status register */
+pub const ACPI_BITREG_TIMER_STATUS: i32 = 0x00;
+pub const ACPI_BITREG_BUS_MASTER_STATUS: i32 = 0x01;
+pub const ACPI_BITREG_GLOBAL_LOCK_STATUS: i32 = 0x02;
+pub const ACPI_BITREG_POWER_BUTTON_STATUS: i32 = 0x03;
+pub const ACPI_BITREG_SLEEP_BUTTON_STATUS: i32 = 0x04;
+pub const ACPI_BITREG_RT_CLOCK_STATUS: i32 = 0x05;
+pub const ACPI_BITREG_WAKE_STATUS: i32 = 0x06;
+pub const ACPI_BITREG_PCIEXP_WAKE_STATUS: i32 = 0x07;
+
+/* PM1 Enable register */
+pub const ACPI_BITREG_TIMER_ENABLE: i32 = 0x08;
+pub const ACPI_BITREG_GLOBAL_LOCK_ENABLE: i32 = 0x09;
+pub const ACPI_BITREG_POWER_BUTTON_ENABLE: i32 = 0x0A;
+pub const ACPI_BITREG_SLEEP_BUTTON_ENABLE: i32 = 0x0B;
+pub const ACPI_BITREG_RT_CLOCK_ENABLE: i32 = 0x0C;
+pub const ACPI_BITREG_PCIEXP_WAKE_DISABLE: i32 = 0x0D;
+
+/* PM1 Control register */
+pub const ACPI_BITREG_SCI_ENABLE: i32 = 0x0E;
+pub const ACPI_BITREG_BUS_MASTER_RLD: i32 = 0x0F;
+pub const ACPI_BITREG_GLOBAL_LOCK_RELEASE: i32 = 0x10;
+pub const ACPI_BITREG_SLEEP_TYPE: i32 = 0x11;
+pub const ACPI_BITREG_SLEEP_ENABLE: i32 = 0x12;
+
+/* PM2 Control register */
+pub const ACPI_BITREG_ARB_DISABLE: i32 = 0x13;
+pub const ACPI_BITREG_MAX: i32 = 0x13;
+pub const ACPI_NUM_BITREG: i32 = ACPI_BITREG_MAX + 1;
+
+/* Status register values. A 1 clears a status bit. 0 = no effect */
+pub const ACPI_CLEAR_STATUS: i32 = 1;
+
+/* Enable and Control register values */
+pub const ACPI_ENABLE_EVENT: i32 = 1;
+pub const ACPI_DISABLE_EVENT: i32 = 0;
