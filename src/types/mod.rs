@@ -1,9 +1,9 @@
 // -----------------
-// REEXPORT
+// MODULES
 // -----------------
 
+pub mod object;
 pub mod local;
-pub use local::*;
 
 // -----------------
 // BUILD TYPES & CONSTANTS
@@ -34,6 +34,20 @@ pub type AcpiHandle = *mut c_void;
 
 pub type AcpiThreadId = u64;
 
-// 64-bit only
+// 64-bit only (we always consider 64-bit)
+pub const ACPI_USE_NATIVE_DIVIDE: bool = true;
+pub const ACPI_USE_NATIVE_MATH64: bool = true;
 pub const ACPI_SIZE_MAX: u64 = ACPI_UINT64_MAX;
 pub const ACPI_MAX_PTR: u64 = ACPI_UINT64_MAX;
+pub type AcpiSize = u64;
+pub type AcpiNativeInt = i64;
+pub type AcpiIOAddress = u64;
+pub type AcpiPhysicalAddress = u64;
+
+// OS-Dependent
+pub type AcpiCpuFlags = AcpiSize;
+pub type AcpiSpinlock = *mut c_void;
+pub type AcpiSemaphore = *mut c_void;
+pub type AcpiMutex = *mut c_void;
+
+// Compiler-Dependent
