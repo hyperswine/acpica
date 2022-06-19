@@ -1,15 +1,45 @@
+use super::{local::AcpiNamespaceNode, AcpiMutex, AcpiSemaphore, AcpiThreadId};
 use core::{ffi::c_char, ptr::null_mut};
 
-use super::{
-    local::{AcpiNamespaceNode, AcpiOperandObject},
-    AcpiSemaphore,
-};
+// ----------------
+// OPERAND OBJECT
+// ----------------
 
-// ----------
-// TYPES
-// ----------
+#[repr(C)]
+pub union AcpiOperandObject {
+    Common: AcpiObjectCommon,
+    Integer: AcpiObjectInteger,
+    String: AcpiObjectString,
+    Buffer: AcpiObjectBuffer,
+    Package: AcpiObjectPackage,
+    Event: AcpiObjectEvent,
+    Method: AcpiObjectMethod,
+    Mutex: AcpiObjectMutex,
+    Region: AcpiObjectRegion,
+    CommonNotify: AcpiObjectNotifyCommon,
+    Device: AcpiObjectDevice,
+    PowerResource: AcpiObjectPowerResource,
+    Processor: AcpiObjectProcessor,
+    ThermalZone: AcpiObjectThermalZone,
+    CommonField: AcpiObjectCommonField,
+    Field: AcpiObjectField,
+    BufferField: AcpiObjectBufferField,
+    BankField: AcpiObjectBankField,
+    IndexField: AcpiObjectIndexField,
+    Notify: AcpiObjectNotify,
+    AddressSpace: AcpiObjectAddrHandler,
+    Reference: AcpiObjectReference,
+    Extra: AcpiObjectExtra,
+    Data: AcpiObjectData,
+    Cache: AcpiObjectCacheList,
+    Node: AcpiNamespaceNode,
+}
 
-// Headers and Buffers
+// ----------------
+// Acpi Objects
+// ----------------
+
+// Headers & Buffers
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -28,7 +58,8 @@ pub struct AcpiCommonBufferInfo<T> {
     length: u32,
 }
 
-// MAIN OBJECTS
+// Main Objects
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct AcpiObjectCommon(AcpiObjectCommonHeader);
@@ -70,6 +101,21 @@ pub struct AcpiObjectPackage {
 pub struct AcpiObjectEvent {
     header: AcpiObjectCommonHeader,
     os_semaphore: AcpiSemaphore,
+}
+
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct AcpiObjectMutex {
+    header: AcpiObjectCommonHeader,
+    synclevel: u8,
+    acquisition_depth: u16,
+    os_mutex: AcpiMutex,
+    thread_id: AcpiThreadId,
+    owner_thread: *mut AcpiThreadState,
+    prev: *mut AcpiOperandObject,
+    next: *mut AcpiOperandObject,
+    node: *mut AcpiNamespaceNode,
+    original_sync_level: u8,
 }
 
 // ----------

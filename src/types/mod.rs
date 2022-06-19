@@ -4,9 +4,9 @@
 
 // NOTE: does not include any debug statistics (ACPI_DBG_TRACK_ALLOCATIONS)
 
+pub mod aml;
 pub mod local;
 pub mod object;
-pub mod aml;
 
 // -----------------
 // BUILD TYPES & CONSTANTS
@@ -104,3 +104,8 @@ pub const ACPI_CLEAR_STATUS: i32 = 1;
 /* Enable and Control register values */
 pub const ACPI_ENABLE_EVENT: i32 = 1;
 pub const ACPI_DISABLE_EVENT: i32 = 0;
+
+// COMPILER COMMON TYPES
+pub type COMPILER_DEPENDENT_UINT64 = u64;
+pub type COMPILER_DEPENDENT_INT64 = i64;
+pub type ACPI_THREAD_ID = u64;

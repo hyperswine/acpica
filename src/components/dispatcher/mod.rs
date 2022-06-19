@@ -14,7 +14,7 @@ fn acpi_ds_execute_arguments(
 ) -> AcpiStatus {
     let mut status = 0;
 
-    let parse_object = acpi_ds_alloc_op()
+    // let parse_object = acpi_ps_alloc_op()
 
     status
 }
